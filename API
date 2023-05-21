@@ -1,4 +1,19 @@
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents")
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+local a = pcall(function()settings = JSOND(readfile("sin/config/s.ctmr"))end)
+local lplr = game:GetService("Players").LocalPlayer or game:GetService("Players"):GetPropertyChangedSignal("LocalPlayer"):wait()
+local gf=game:GetService("Workspace").Terrain._Game
+local LS = game:GetService("Lighting")
+local camera = game:GetService("Workspace").Camera
 
+local CheckGamepass=function(userid,gamepass)
+	local g = game:HttpGet("https://inventory.roblox.com/v1/users/"..tostring(userid).."/items/GamePass/"..tostring(gamepass)):sub(65)
+    if g ~= "" then 
+        return true
+    else 
+        return false
+    end
+end
 
 getgenv().fspawn = function(f)
 			coroutine.wrap(f)() -- / 5.24.2021 Doing a wrap might work better?
