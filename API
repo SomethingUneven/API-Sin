@@ -1,5 +1,3 @@
-game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents")
-game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
 local a = pcall(function()settings = JSOND(readfile("sin/config/s.ctmr"))end)
 local lplr = game:GetService("Players").LocalPlayer or game:GetService("Players"):GetPropertyChangedSignal("LocalPlayer"):wait()
 local gf=game:GetService("Workspace").Terrain._Game
