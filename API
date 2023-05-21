@@ -1,0 +1,302 @@
+
+
+getgenv().fspawn = function(f)
+			coroutine.wrap(f)() -- / 5.24.2021 Doing a wrap might work better?
+			-- / 6.20.2021 Thanks to unkown user I fixed this lmao
+		end
+		--Easy to write frame wait.
+		getgenv().fwait=function()
+			game:GetService("RunService").RenderStepped:Wait()
+		end
+
+getgenv().rchat = function(input)
+			if chatbypass then 
+				getgenv().chatbypass = false
+				game:GetService("Players"):Chat(input) 
+				getgenv().chatbypass = true
+			elseif _G.owoToggle then
+				_G.owoToggle = false
+				game:GetService("Players"):Chat(input) 
+				_G.owoToggle = true
+			else
+				game:GetService("Players"):Chat(input) 
+			end
+		end
+    
+
+
+local respawnpos
+            lplr.CharacterAdded:connect(function(a)
+				if not RIG then
+					a:WaitForChild("Humanoid").Died:connect(function()
+						if lplr.Character:FindFirstChild("HumanoidRootPart") then
+							lplr.Character.HumanoidRootPart.Anchored = true
+							respawnpos = lplr.Character.HumanoidRootPart.CFrame
+						end
+						rchat("respawn me")
+					end)
+					for i,connection in pairs(getconnections(a:WaitForChild("Humanoid").Died)) do
+					end
+				else
+					a:WaitForChild("Humanoid").Died:connect(function()
+						rchat("respawn me")
+					end)
+					for i,connection in pairs(getconnections(a:WaitForChild("Humanoid").Died)) do
+					end
+				end
+            end)
+            for i,connection in pairs(getconnections(lplr.CharacterAdded)) do
+                if i==1 then getgenv().giga2 = connection end
+            end
+			if not RIG then
+				for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+					v.Chatted:connect(function(msg)
+						if msg:lower():find("respawn") or msg:lower():find("char") or msg:lower():find("reload") or msg:lower():find("reset") or msg:lower():find("tp") or msg:lower():find("teleport") then
+							respawnpos = lplr.Character:WaitForChild("HumanoidRootPart").CFrame
+						end
+					end)
+					for i,connection in pairs(getconnections(v.Chatted)) do
+					end
+				end
+			end
+			if not RIG then
+				game:GetService("Players").PlayerAdded:connect(function(v)
+					v.Chatted:connect(function(msg)
+						if msg:lower():find("respawn") or msg:lower():find("char") or msg:lower():find("reload") or msg:lower():find("reset") or msg:lower():find("tp") or msg:lower():find("teleport") then
+							h = lplr.Character:FindFirstChild("HumanoidRootPart")
+							if h then
+								respawnpos = h.CFrame
+							else
+								respawnpos = CFrame.new(0,4,0)
+							end
+						end
+					end)
+					for i,connection in pairs(getconnections(v.Chatted)) do
+					end
+				end)
+				for i,connection in pairs(getconnections(game:GetService("Players").PlayerAdded)) do
+				end
+				lplr.CharacterAdded:connect(function(c)
+					if respawnpos ~= nil then
+						c:WaitForChild("HumanoidRootPart").CFrame = respawnpos
+					end
+				end)
+				for i,connection in pairs(getconnections(lplr.CharacterAdded)) do
+				end
+			end
+            rchat("reset me")
+
+
+            if enableall then
+                getgenv().enableall = true
+            end
+            if not lplr.Character:FindFirstChild("HumanoidRootPart") then
+                print("You have no torso?")
+            end
+            local pos
+            pos = lplr.Character.HumanoidRootPart.CFrame
+            while enableall do wait()
+                if lplr.Character:FindFirstChild("HumanoidRootPart") then
+                    lplr.Character.HumanoidRootPart.CFrame = pos
+end
+end
+
+spawn(function()
+    local regen
+    regen = gf.Admin:WaitForChild("Regen",5)
+    if regen == nil then
+        print("Regen part does not exist?")
+        return
+    end
+    if regen.CFrame ~= CFrame.new(-7.16500044, 5.42999268, 94.7430038, 0, 0, -1, 0, 1, 0, 1, 0, 0) then
+        print("Regen was tampered with via 'Relocation'!")
+    end
+end)
+
+spawn(function()
+    local iVelocity = 0
+    for _1,v1 in pairs(gf.Workspace:GetDescendants()) do
+        if v1:IsA("BasePart") then
+            if v1.Velocity ~= Vector3.new(0,0,0) then
+                iVelocity = iVelocity + 1
+                v1.Velocity = Vector3.new(0,0,0)
+            end
+        end
+    end
+    if iVelocity ~= 0 then
+        print("Found "..iVelocity.." part(s) with modified velocity that were corrected.")
+    end
+end)
+
+
+lplr.PlayerGui.ChildAdded:connect(function(c)
+    if c.Name == "MessageGUI" or c.Name == "EFFECTGUIBLIND" or c.Name == "Blind" or c.Name == "Message" then
+        fwait()c:Destroy()
+    elseif c.Name == "CamSpinClient" then
+        fwait()c.Disabled = true c:Destroy()
+    elseif c.Name == "HintGUI" then
+	repeat fwait() until c:FindFirstChild("bg")
+	repeat fwait() until c.bg:FindFirstChild("msg")
+        c.bg.msg.Text = c.bg.msg.Text:sub(800)
+    end
+end)
+for i,connection in pairs(getconnections(lplr.PlayerGui.ChildAdded)) do
+end
+
+lplr.CharacterAdded:connect(function(c) --dprint("Spawn")
+    c.ChildAdded:connect(function(p)
+        if p.Name == "Seizure" and p:IsA("Script") then
+            p.Disabled = true
+        end
+    end)
+    for i,connection in pairs(getconnections(c.ChildAdded)) do
+    end
+    if charnil then dprint("after nil")
+        c.ChildAdded:connect(function(p)
+            if c.Parent ~= game:GetService("Workspace") then return end
+            fwait()p.Parent = nil
+        end)
+        for i,connection in pairs(getconnections(c.ChildAdded)) do
+        end
+    end
+    if namenil then dprint("removed")
+        c.ChildAdded:connect(function(p)
+            if p:IsA("Model") then
+                fwait()p.Parent = nil
+            end
+        end)
+        for i,connection in pairs(getconnections(c.ChildAdded)) do
+        end
+    end
+    --[[if RIG then
+        local hr = c:WaitForChild("HumanoidRootPart",5)
+        lplr.Character = RIG
+        while c do
+            local pos = RIG.HumanoidRootPart.CFrame
+            wait(.1)
+            if hr then
+                hr.CFrame = pos
+            end
+        end
+    end
+    --]]
+end)
+for i,connection in pairs(getconnections(lplr.CharacterAdded)) do
+end
+
+gf.Folder.ChildAdded:connect(function(c)
+    if c.Name:sub(-4) == "jail" or c:IsA("Message") then
+        fwait()c.Parent = nil
+    end
+    if c.Name == "Sound" then
+        while c.Parent ~= nil do
+            if c.PlaybackLoudness > 900 then
+                rchat("stopmusic")
+            end
+        fwait()end
+    end
+end)
+for i,connection in pairs(getconnections(gf.Folder.ChildAdded)) do
+end
+
+LS.ChildAdded:connect(function(c)
+        if c == lplr.Character then 
+            fwait()lplr.Character.Parent = game:GetService("Workspace")
+        end
+            fwait()lplr.Character.Parent = game:GetService("Workspace")
+            local prev = lplr.Character.HumanoidRootPart.CFrame
+            rchat("unpunish me")
+            lplr.Character.HumanoidRootPart.CFrame = prev
+end)
+for i,connection in pairs(getconnections(game:GetService("Lighting").ChildAdded)) do
+end
+
+camera.ChildAdded:connect(function(c)
+    if c.Name == "GrayScale" then
+        wait(10)
+        if c.Parent == camera then
+            print("Detected grayscale inside of camera for over 10 seconds.")
+            c:Destroy()
+        end
+    end
+end)
+for i,connection in pairs(getconnections(game:GetService("Lighting").ChildAdded)) do
+end
+
+game:GetService("Players").PlayerAdded:connect(function(p)
+    p.CharacterAdded:connect(function(c)
+        local hrp = c:WaitForChild("HumanoidRootPart",30) --If their HumanoidRootPart does not spawn in a certain timeframe. 
+        if hrp == nil then
+            return
+        end
+        hrp.Transparency = 0.8
+        hrp.Color = Color3.new(1,0,0)
+        while hrp.Parent ~= nil do
+            hrp.CanCollide = false
+        fwait()end
+    end)
+end)
+for i,connection in pairs(getconnections(game:GetService("Lighting").ChildAdded)) do
+end
+
+game:GetService("Workspace").ChildAdded:connect(function(c)
+    if c:IsA("BasePart") then
+        if c.Name == "EggBomb" then
+            for _,con in pairs(getconnections(c.Touched)) do
+                con:Disable() 
+            end
+        end
+    end
+end)
+for i,connection in pairs(getconnections(game:GetService("Workspace").ChildAdded)) do
+end
+
+spawn(function()
+    for _,p in pairs(game:GetService("Players"):GetPlayers()) do
+        p.CharacterAdded:connect(function(c)
+			pcall(function()
+				local hrp = c:WaitForChild("HumanoidRootPart",30) --If their HumanoidRootPart does not spawn in a certain timeframe. 
+				if hrp == nil then
+					return
+				end
+				hrp.Transparency = 0.8
+				hrp.Color = Color3.new(1,0,0)
+				while hrp.Parent ~= nil do
+					hrp.CanCollide = false
+					fwait()
+				end
+			end)
+        end)
+    end
+end)
+
+spawn(function()
+    if game:GetService("Lighting"):FindFirstChild(lplr.Name) then
+        lplr.Character.Parent = game:GetService("Workspace")
+    end
+end)
+
+spawn(function()
+    for _,v in pairs(gf.Folder:GetChildren()) do
+        if v.Name:sub(-4) == "jail" then
+            v.Parent = nil
+        end
+    end
+end)
+
+spawn(function()
+    while active do wait()
+        pcall(function()
+            if lplr.Character.HumanoidRootPart.Position.Y < 0 then
+                spawn(function()
+                    for i=1,60 do
+                        lplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    fwait()end
+                end)
+                lplr.Character.HumanoidRootPart.CFrame = CFrame.new(-30.125618, 7.92999983, 71.0002747, -0.999968767, -0.000224543168, -0.00791277923, -0.00023817255, 0.99999851, 0.00172152603, 0.00791238621, 0.00172335713, -0.999967277)
+            end
+        end)
+    end
+end)
+
+print("end")
